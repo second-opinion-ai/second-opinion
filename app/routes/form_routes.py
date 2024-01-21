@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template
+from flask import Blueprint, request, render_template, g
 from app.services.chat_gpt_service import prompt_chat_gpt
 
 form_bp = Blueprint('form_bp', __name__)
@@ -13,6 +13,11 @@ def submit_diagnostic():
     model = request.form.get('model')
     year = request.form.get('year')
     car_issue = request.form.get('carIssue')
+
+    g.make = request.form.get('make')
+    g.model = request.form.get('model')
+    g.year = request.form.get('year')
+    g.car_issue = request.form.get('carIssue')
 
     message_content = f"Car Make: {make}, Model: {model}, Year: {year}, Issue: {car_issue}"
 
