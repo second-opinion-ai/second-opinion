@@ -9,3 +9,7 @@ def home():
 @form_bp.route('/form')
 def form():
     return render_template('form.html')
+
+@form_bp.route('/intake_form')
+def intake_form():
+    return render_template('intake_form.html')

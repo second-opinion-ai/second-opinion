@@ -1,0 +1,133 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Repair Request Form</title>
+    <style>
+        #address, #email, #vin, #license_plate{
+            display: block;
+            width: 500px;
+            margin-bottom: 5px;
+        }
+        /* Increase the height of the Description of Issues textarea */
+        #make, #model, #year {
+            width: 115px;
+            margin-bottom: 5px;
+        }
+        #name {
+            width: 165px;
+            margin-bottom: 5px;
+        }
+        #phone {
+            width: 172px;
+            margin-bottom: 5px;
+        }
+
+        #description_text {
+            height: 150px; /* Adjust height as needed */
+            width: 500px;
+        }
+        #other {
+            display: block;
+            height: 50px;
+            width: 500px;
+            margin-bottom: 5px;
+        }
+        #requested_services {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #requested_services label {
+            margin-bottom: 5px;
+        }
+        button {
+            background-color: #f36401;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        button:hover {
+            background-color: #cc6634;
+        }
+        
+    </style>
+</head>
+<body>
+    <h1>Auto Repair Request Form</h1>
+    <form action="process_form.php" method="post">
+        <!-- Section 1: Custom Information -->
+        <section class="customer-information">
+            <h2>Custom Information</h2>
+            <div id="name_phone">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+        
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div> 
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" required>
+        
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+        </section>
+        
+        <!-- Section 2: Vehicle Information -->
+        <section class="vehicle-information">
+            <h2>Vehicle Information</h2>
+            <div id="make_model_year">
+                <label for="make">Make:</label>
+                <input type="text" id="make" name="make" required>
+
+                <label for="model">Model:</label>
+                <input type="text" id="model" name="model" required>
+
+                <label for="year">Year:</label>
+                <input type="text" id="year" name="year" required>
+            </div>
+            <div>
+                <label for="vin">Vehicle identification number (VIN):</label>
+                <input type="text" id="vin" name="vin" required>
+        
+                <label for="license_plate">License Plate Number:</label>
+                <input type="text" id="license_plate" name="license_plate" required>
+            </div>
+        </section>
+        
+        <!-- Section 3: Description of Issues -->
+        <section id="description">
+            <h2>Description of Issues</h2>
+            <textarea id="description_text" name="description" rows="8" required></textarea>
+        </section>
+
+        <!-- Section 4: Requested Services -->
+        <section id="requested_services">
+            <h2>Requested Services</h2>
+            <label><input type="checkbox" name="services[]" value="Routine Maintenance"> Routine Maintenance</label>
+            <label><input type="checkbox" name="services[]" value="Brake Inspection"> Brake Inspection</label>
+            <label><input type="checkbox" name="services[]" value="Oil Change"> Oil Change</label>
+            <label><input type="checkbox" name="services[]" value="Diagnostic Services"> Diagnostic Services</label>
+            <label><input type="checkbox" name="services[]" value="Tire Rotation"> Tire Rotation</label>
+            <label><input type="checkbox" name="services[]" value="Battery Services"> Battery Services</label>       
+            <label><input type="checkbox" name="services[]" value="Air Conditioning and Heating Repairs"> Air Conditioning and Heating Repairs</label>
+            <label><input type="checkbox" name="services[]" value="Engine Repair"> Engine Repair</label>
+            <label><input type="checkbox" name="services[]" value="Electrical System Repairs"> Electrical System Repairs</label>
+        </section>
+        
+        <section id="other_services">
+            <h2>Other Services</h2>
+            <input type="text" id="other" name="other">
+        </section>
+
+        <button type="submit">Submit form</button>
+    </form>
+</body>
+</html>
