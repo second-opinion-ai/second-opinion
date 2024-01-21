@@ -19,4 +19,3 @@ def prompt_chat_gpt(message_content, model="gpt-3.5-turbo"):
 
     response = requests.post(url, headers=headers, data=json.dumps(data), verify=False)
     return response.json()
-

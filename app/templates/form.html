@@ -42,7 +42,7 @@
 </head>
 <body>
     <h1>Car Diagnostic Tool</h1>
-    <form id="carDiagnosticForm" method="post">
+    <form id="carDiagnosticForm" method="post" action="/submit_diagnostic">
         <div class="container">
             <label for="make">Make:</label>
             <input type="text" id="make" name="make" required>
@@ -60,40 +60,6 @@
             <textarea id="carIssue" name="carIssue" required></textarea>
         </div>
         <button type="submit">Submit Diagnostic</button>
-        <div class="container">
-            <label for="diagnosticAnswer">Diagnostic Answer:</label>
-            <textarea id="diagnosticAnswer" name="diagnosticAnswer"></textarea>
-        </div>
     </form>
-
-    <script>
-    document.getElementById('carDiagnosticForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        var make = document.getElementById('make').value;
-        var model = document.getElementById('model').value;
-        var year = document.getElementById('year').value;
-        var carIssue = document.getElementById('carIssue').value;
-
-        var messageContent = `Car Make: ${make}\nModel: ${model}\nYear: ${year}\nIssue: ${carIssue}`;
-
-        fetch('/api/chat_gpt/prompt/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                message_content: messageContent,
-                model: 'gpt-3.5-turbo'
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('diagnosticAnswer').textContent = data.choices[0].message.content;
-        })
-        .catch(error => console.error('Error:', error));
-    });
-    </script>
-
 </body>
 </html>
