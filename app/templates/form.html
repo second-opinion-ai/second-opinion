@@ -19,7 +19,7 @@
             margin-right: 10px;
             font-weight: bold;
         }
-        textarea, input[type="text"], select {
+        textarea, input[type="text"] {
             flex-grow: 1;
             padding: 10px;
             border: 1px solid #ddd;
@@ -42,7 +42,7 @@
 </head>
 <body>
     <h1>Car Diagnostic Tool</h1>
-    <form action="/submit" method="post">
+    <form id="carDiagnosticForm" method="post">
         <div class="container">
             <label for="make">Make:</label>
             <input type="text" id="make" name="make" required>
@@ -65,5 +65,35 @@
         </div>
         <button type="submit">Submit Diagnostic</button>
     </form>
+
+    <script>
+    document.getElementById('carDiagnosticForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        var make = document.getElementById('make').value;
+        var model = document.getElementById('model').value;
+        var year = document.getElementById('year').value;
+        var carIssue = document.getElementById('carIssue').value;
+
+        var messageContent = `Car Make: ${make}\nModel: ${model}\nYear: ${year}\nIssue: ${carIssue}`;
+
+        fetch('/api/chat_gpt/prompt/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message_content: messageContent,
+                model: 'gpt-3.5-turbo'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('diagnosticAnswer').textContent = data.choices[0].message.content;
+        })
+        .catch(error => console.error('Error:', error));
+    });
+    </script>
+
 </body>
 </html>
