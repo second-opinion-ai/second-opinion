@@ -1,3 +1,4 @@
+import os
 from flask import g
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain.schema import SystemMessage
@@ -19,14 +20,14 @@ def some_function():
 
 
 def get_context():
-    llm = ChatOpenAI(temperature=0.1)
-    embeddings =OpenAIEmbeddings()
+    llm = ChatOpenAI(temperature=0.1, openai_api_key=os.environ.get('OPENAI_API_KEY'))
+    embeddings =OpenAIEmbeddings(openai_api_key=os.environ.get('OPENAI_API_KEY'))
     car_diagnosis= FAISS.load_local("vector_files", embeddings)
     car_diagnosis = car_diagnosis.as_retriever()
 
     car_tool = create_retriever_tool(
         car_diagnosis,
-        "search for car diagnosis context",
+        "search-for-car-diagnosis-context",
         "provides information about how to fix cars and what problems they have")
 
     tool1 = [car_tool]
@@ -35,11 +36,11 @@ def get_context():
         content='''
 
         You are a Virtual Assistant to SUGGEST CAR DIAGNOSIS.
-        BASED ON THE CAR MAKE, CAR MODEL, CAR YEAR and CAR ISSUE, PROVIDE A DESCRIPTION OF WHAT IS WRONG AND HOW TO FIX IT AND WHAT IS THE DIAGNOSIS?
+        BASED ON THE CAR MAKE, CAR MODEL, CAR YEAR and CAR ISSUE, PROVIDE A DESCRIPTION OF WHAT IS WRONG AND HOW TO FIX IT AND WHAT IS THE DIAGNOSIS? CAREFULLY ASSESS THE CONTEXT BEFORE ANSWERING.
 
         Format:
 
-        WHAT IS DIAGNOSIS: ....
+        WHAT IS THE DIAGNOSIS: ....
 
         HOW TO FIX IT: ....
 
@@ -60,9 +61,11 @@ def get_context():
 
     details = some_function()
     merged_text = 'CAR MAKE IS: ' + str(details[0]) + '. CAR MODEL IS: ' + str(details[1]) + '. CAR YEAR IS: ' + str(details[2]) + '. CAR ISSUE IS: ' + str(details[3])
+
+
     response = agent_executor(merged_text)
-    print("response: {}".format(response))
-    return response
+
+    return response['output']
 
 
 
