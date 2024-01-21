@@ -1,11 +1,12 @@
 from flask import g
-from langchain.embeddings import OpenAIEmbeddings
+from langchain_community.embeddings import OpenAIEmbeddings
 from langchain.schema import SystemMessage
-from langchain.chat_models import ChatOpenAI
-from langchain.document_loaders import UnstructuredPDFLoader
+from langchain_community.chat_models import ChatOpenAI
+from langchain_community.document_loaders import UnstructuredPDFLoader
 from langchain.agents.agent_toolkits import create_retriever_tool, create_conversational_retrieval_agent
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
+
 
 def some_function():
     if hasattr(g, 'make'):
@@ -13,7 +14,7 @@ def some_function():
         model = g.model
         year = g.year
         car_issue = g.car_issue
-    retrn [make, model, year, car_issue]
+    return [make, model, year, car_issue]
 
 
 
@@ -43,13 +44,13 @@ def get_context():
         HOW TO FIX IT: ....
 
         STRICTLY USE THIS FORMAT TO ANSWER
-        
+
         """
         '''
     )
 
     agent_executor = create_conversational_retrieval_agent(
-        llm=llm, 
+        llm=llm,
         tools=tool1,
         system_message=system_message,
         remember_intermediate_steps=True,
@@ -58,7 +59,7 @@ def get_context():
     )
 
     details = some_function()
-    merged_text = 'CAR MAKE IS: ' + str(details[0]) + '. CAR MODEL IS: ' + str(details[1]) + '. CAR YEAR IS: ' + str(details[2]) + '. CAR ISSUE IS: ' + str(details[3])    
+    merged_text = 'CAR MAKE IS: ' + str(details[0]) + '. CAR MODEL IS: ' + str(details[1]) + '. CAR YEAR IS: ' + str(details[2]) + '. CAR ISSUE IS: ' + str(details[3])
     response = agent_executor(merged_text)
     print("response: {}".format(response))
     return response
