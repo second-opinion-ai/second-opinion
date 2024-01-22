@@ -6,6 +6,7 @@ form_bp = Blueprint('form_bp', __name__)
 @form_bp.route('/')
 def home():
     return render_template('form.html')
+  
 
 @form_bp.route('/submit_diagnostic', methods=['POST'])
 def submit_diagnostic():
