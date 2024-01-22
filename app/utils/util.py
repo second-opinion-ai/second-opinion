@@ -41,7 +41,7 @@ def get_context():
         Format:
 
         WHAT IS THE DIAGNOSIS: ....
-
+        add a new line here
         HOW TO FIX IT: ....
 
         STRICTLY USE THIS FORMAT TO ANSWER
@@ -64,8 +64,11 @@ def get_context():
 
 
     response = agent_executor(merged_text)
+    response_text = response['output']
 
-    return response['output']
+    response_text.replace("HOW TO FIX IT", "\n HOW TO FIX IT")
+
+    return response_text
 
 
 
