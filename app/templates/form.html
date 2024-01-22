@@ -38,11 +38,40 @@
         button:hover {
             background-color: #cc6634;
         }
+        #responseContainer {
+            margin-top: 20px;
+        }
     </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("carDiagnosticForm").addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                var formData = new FormData(this);
+                fetch('/submit_diagnostic', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("responseContainer").innerHTML = `
+                        <h2>Car Information</h2>
+                        <p><strong>Make:</strong> ${data.diagnostic_info.make}</p>
+                        <p><strong>Model:</strong> ${data.diagnostic_info.model}</p>
+                        <p><strong>Year:</strong> ${data.diagnostic_info.year}</p>
+                        <p><strong>Issue:</strong> ${data.diagnostic_info.car_issue}</p>
+                        <h2>Chat GPT Response</h2>
+                        <p>${data.chat_gpt_response}</p>
+                    `;
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
 </head>
 <body>
     <h1>Car Diagnostic Tool</h1>
-    <form id="carDiagnosticForm" method="post" action="/submit_diagnostic">
+    <form id="carDiagnosticForm">
         <div class="container">
             <label for="make">Make:</label>
             <input type="text" id="make" name="make" required>
@@ -61,5 +90,6 @@
         </div>
         <button type="submit">Submit Diagnostic</button>
     </form>
+    <div id="responseContainer"></div>
 </body>
 </html>
