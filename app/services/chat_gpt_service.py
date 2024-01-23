@@ -1,9 +1,12 @@
+import os
+
 import requests
 import json
 from decouple import config
 
+
 def prompt_chat_gpt(message_content, model="gpt-3.5-turbo"):
-    openai_api_key = config("OPENAI_API_KEY")
+    openai_api_key = os.environ.get("OPENAI_API_KEY")
 
     url = "https://api.openai.com/v1/chat/completions"
     headers = {
