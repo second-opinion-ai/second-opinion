@@ -1,5 +1,4 @@
 import os
-from flask import g
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain.schema import SystemMessage
 from langchain_community.chat_models import ChatOpenAI
@@ -7,18 +6,7 @@ from langchain.agents.agent_toolkits import create_retriever_tool, create_conver
 from langchain_community.vectorstores import FAISS
 
 
-def retrieve_car_details():
-    if all(hasattr(g, attr) for attr in ['make', 'model', 'year', 'car_issue']):
-        make = g.make
-        model = g.model
-        year = g.year
-        car_issue = g.car_issue
-        return [make, model, year, car_issue]
-    else:
-        return [None, None, None, None]
-
-
-def get_context():
+def get_context(make, model, year, car_issue):
     llm = ChatOpenAI(temperature=0.1, openai_api_key=os.environ.get('OPENAI_API_KEY'))
     embeddings = OpenAIEmbeddings(openai_api_key=os.environ.get('OPENAI_API_KEY'))
     car_diagnosis = FAISS.load_local("vector_files", embeddings)
@@ -58,9 +46,8 @@ def get_context():
         max_token_limit=4000
     )
 
-    details = retrieve_car_details()
-    merged_text = 'CAR MAKE IS: ' + str(details[0]) + '. CAR MODEL IS: ' + str(details[1]) + '. CAR YEAR IS: ' + str(
-        details[2]) + '. CAR ISSUE IS: ' + str(details[3])
+    merged_text = 'CAR MAKE IS: ' + str(make) + '. CAR MODEL IS: ' + str(model) + '. CAR YEAR IS: ' + str(
+        year) + '. CAR ISSUE IS: ' + str(car_issue)
 
     response = agent_executor(merged_text)
     response_text = response['output']
