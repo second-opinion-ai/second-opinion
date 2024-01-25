@@ -12,37 +12,28 @@ from langchain.agents.agent_toolkits import create_retriever_tool, create_conver
 from langchain_community.vectorstores import FAISS
 
 
-def retrieve_car_details():
-  """Retrieves car details stored in Flask's global `g` object.
+def get_context(make, model, year, car_issue):
+  """
+  Generates a diagnostic context using LangChain and OpenAI GPT models.
 
-    Checks if the required car details (make, model, year, and issue) are present
-    in the global context and returns them as a list. If any detail is missing,
-    returns a list with None values.
+  Utilizes LangChain to load a conversational retrieval agent with FAISS
+  vectorstores and OpenAI embeddings. It creates a diagnostic context
+  based on the provided car details (make, model, year, and issue) and
+  prompts the agent to provide a diagnosis.
 
-    Returns:
-      list: A list containing the car's make, model, year, and issue, or None
-      values if any detail is missing.
-    """
-  if all(hasattr(g, attr) for attr in ['make', 'model', 'year', 'car_issue']):
-    make = g.make
-    model = g.model
-    year = g.year
-    car_issue = g.car_issue
-    return [make, model, year, car_issue]
-  else:
-    return [None, None, None, None]
+  Args:
+    make (str): The make of the car.
+    model (str): The model of the car.
+    year (str): The year of the car.
+    car_issue (str): The reported issue of the car.
 
+  Returns:
+    str: A string response from the conversational retrieval agent with
+    diagnostic information.
 
-def get_context():
-  """Generates a diagnostic context using LangChain and OpenAI GPT models.
-
-    Utilizes LangChain to load a conversational retrieval agent with FAISS
-    vectorstores and OpenAI embeddings. It then creates a diagnostic context
-    by retrieving car details and prompts the agent to provide a diagnosis.
-
-    Returns:
-      str: A string response from the conversational retrieval agent with
-      diagnostic information.
+  The function constructs a query combining the provided car details and
+  uses the conversational agent to generate a response that includes a
+  diagnosis and suggested fixes, adhering to the specified format.
   """
   llm = ChatOpenAI(temperature=0.1, openai_api_key=os.environ.get('OPENAI_API_KEY'))
   embeddings = OpenAIEmbeddings(openai_api_key=os.environ.get('OPENAI_API_KEY'))
@@ -50,28 +41,28 @@ def get_context():
   car_diagnosis = car_diagnosis.as_retriever()
 
   car_tool = create_retriever_tool(
-    car_diagnosis,
-    "search-for-car-diagnosis-context",
-    "provides information about how to fix cars and what problems they have")
+  car_diagnosis,
+  "search-for-car-diagnosis-context",
+  "provides information about how to fix cars and what problems they have")
 
   tool1 = [car_tool]
 
   system_message = SystemMessage(
     content='''
 
-        You are a Virtual Assistant to SUGGEST CAR DIAGNOSIS.
-        BASED ON THE CAR MAKE, CAR MODEL, CAR YEAR and CAR ISSUE, PROVIDE A DESCRIPTION OF WHAT IS WRONG AND HOW TO FIX IT AND WHAT IS THE DIAGNOSIS? CAREFULLY ASSESS THE CONTEXT BEFORE ANSWERING.
+    You are a Virtual Assistant to SUGGEST CAR DIAGNOSIS.
+    BASED ON THE CAR MAKE, CAR MODEL, CAR YEAR and CAR ISSUE, PROVIDE A DESCRIPTION OF WHAT IS WRONG AND HOW TO FIX IT AND WHAT IS THE DIAGNOSIS? CAREFULLY ASSESS THE CONTEXT BEFORE ANSWERING.
 
-        Format:
+    Format:
 
-        WHAT IS THE DIAGNOSIS: ....
-        add a new line here
-        HOW TO FIX IT: ....
+    WHAT IS THE DIAGNOSIS: ....
+    add a new line here
+    HOW TO FIX IT: ....
 
-        STRICTLY USE THIS FORMAT TO ANSWER
+    STRICTLY USE THIS FORMAT TO ANSWER
 
-        """
-        '''
+    """
+    '''
   )
 
   agent_executor = create_conversational_retrieval_agent(
@@ -83,9 +74,8 @@ def get_context():
     max_token_limit=4000
   )
 
-  details = retrieve_car_details()
-  merged_text = 'CAR MAKE IS: ' + str(details[0]) + '. CAR MODEL IS: ' + str(details[1]) + '. CAR YEAR IS: ' + str(
-    details[2]) + '. CAR ISSUE IS: ' + str(details[3])
+  merged_text = 'CAR MAKE IS: ' + str(make) + '. CAR MODEL IS: ' + str(model) + '. CAR YEAR IS: ' + str(
+    year) + '. CAR ISSUE IS: ' + str(car_issue)
 
   response = agent_executor(merged_text)
   response_text = response['output']
