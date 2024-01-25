@@ -43,11 +43,15 @@ def prompt_chat_gpt(message_content, model="gpt-3.5-turbo"):
     "temperature": 0.7
   }
 
-  response = requests.post(
+  try:
+    response = requests.post(
       url,
       headers=headers,
       data=json.dumps(data),
       verify=False,
       timeout=15
-  )
-  return response.json()
+    )
+    response.raise_for_status()
+    return response.json()
+  except requests.exceptions.RequestException as e:
+    raise e
