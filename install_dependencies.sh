@@ -11,7 +11,7 @@ if python -c 'import sys; assert sys.version_info >= (3,9)' > /dev/null; then
 
     if [ -f requirements.txt ]; then
         # install from requirements
-        python -m pip install -r requirements.txt
+        python -m pip install -r requires/dev.txt
     
     fi
 
