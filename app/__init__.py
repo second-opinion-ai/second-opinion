@@ -14,12 +14,13 @@ diagnostics.
 Attributes:
     app (Flask): The Flask application instance.
 """
+
 from flask import Flask
 from flask_cors import CORS
 import os
 
 app = Flask(__name__)
-app.config['OPENAI_API_KEY'] = os.environ.get('OPENAI_API_KEY')
+app.config["OPENAI_API_KEY"] = os.environ.get("OPENAI_API_KEY")
 CORS(app)
 
 # Importing and registering blueprints after Flask app creation
