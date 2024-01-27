@@ -1,22 +1,29 @@
 #!/bin/bash
 
-if python -c 'import sys; assert sys.version_info >= (3,9)' > /dev/null; then
+# Check Python version
+if ! python -c 'import sys; assert sys.version_info >= (3,9)' > /dev/null; then
+    echo "Python version should be >= 3.9"
+    exit 1
+fi
 
-    # update necessary python resources at global level
-    python -m pip install --upgrade setuptools wheel pip
+# Update Python resources at the global level
+python -m pip install --upgrade setuptools wheel pip
 
-    # setup and activate virtual environment
-    python -m venv .venv
-    source "./.venv/bin/activate" && python -m pip install --upgrade setuptools wheel pip
+# Setup and activate virtual environment
+python -m venv .venv
+source .venv/bin/activate
+if [ $? -ne 0 ]; then
+    echo "Failed to activate the virtual environment."
+    exit 1
+fi
 
-    if [ -f requirements.txt ]; then
-        # install from requirements
-        python -m pip install -r requires/dev.txt
-    
-    fi
+python -m pip install --upgrade setuptools wheel pip
 
-else
+# Check and install requirements
+if [ -f "requires/requirements.txt" ]; then
+    python -m pip install -r requires/requirements.txt
+fi
 
-    echo "python version should be >= 3.9"
-
+if [ -f "requires/dev.txt" ]; then
+    python -m pip install -r requires/dev.txt
 fi
