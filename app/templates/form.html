@@ -9,16 +9,19 @@
             background-color: #f4f4f4;
             padding: 20px;
         }
+
         .container {
             margin-bottom: 20px;
             display: flex;
             align-items: center;
         }
+
         label {
             display: block;
             margin-right: 10px;
             font-weight: bold;
         }
+
         textarea, input[type="text"] {
             flex-grow: 1;
             padding: 10px;
@@ -26,6 +29,7 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
+
         button {
             background-color: #f36401;
             color: white;
@@ -35,16 +39,18 @@
             cursor: pointer;
             margin-left: 10px;
         }
+
         button:hover {
             background-color: #cc6634;
         }
+
         #responseContainer {
             margin-top: 20px;
         }
     </style>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("carDiagnosticForm").addEventListener("submit", function(event) {
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("carDiagnosticForm").addEventListener("submit", function (event) {
                 event.preventDefault();
 
                 var formData = new FormData(this);
@@ -52,9 +58,9 @@
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("responseContainer").innerHTML = `
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("responseContainer").innerHTML = `
                         <h2>Car Information</h2>
                         <p><strong>Make:</strong> ${data.diagnostic_info.make}</p>
                         <p><strong>Model:</strong> ${data.diagnostic_info.model}</p>
@@ -63,33 +69,33 @@
                         <h2>LLM Response</h2>
                         <p>${data.chat_gpt_response}</p>
                     `;
-                })
-                .catch(error => console.error('Error:', error));
+                    })
+                    .catch(error => console.error('Error:', error));
             });
         });
     </script>
 </head>
 <body>
-    <h1>Car Diagnostic Tool</h1>
-    <form id="carDiagnosticForm">
-        <div class="container">
-            <label for="make">Make:</label>
-            <input type="text" id="make" name="make" required>
-        </div>
-        <div class="container">
-            <label for="model">Model:</label>
-            <input type="text" id="model" name="model" required>
-        </div>
-        <div class="container">
-            <label for="year">Year:</label>
-            <input type="text" id="year" name="year" required>
-        </div>
-        <div class="container">
-            <label for="carIssue">Car Issue:</label>
-            <textarea id="carIssue" name="carIssue" required></textarea>
-        </div>
-        <button type="submit">Submit Diagnostic</button>
-    </form>
-    <div id="responseContainer"></div>
+<h1>Car Diagnostic Tool</h1>
+<form id="carDiagnosticForm">
+    <div class="container">
+        <label for="make">Make:</label>
+        <input type="text" id="make" name="make" required>
+    </div>
+    <div class="container">
+        <label for="model">Model:</label>
+        <input type="text" id="model" name="model" required>
+    </div>
+    <div class="container">
+        <label for="year">Year:</label>
+        <input type="text" id="year" name="year" required>
+    </div>
+    <div class="container">
+        <label for="carIssue">Car Issue:</label>
+        <textarea id="carIssue" name="carIssue" required></textarea>
+    </div>
+    <button type="submit">Submit Diagnostic</button>
+</form>
+<div id="responseContainer"></div>
 </body>
 </html>
