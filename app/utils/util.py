@@ -4,15 +4,15 @@ This module utilizes LangChain and OpenAI's GPT models to process and generate
 diagnostic information for cars based on their make, model, year, and reported issues.
 """
 import os
-from flask import g
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain.schema import SystemMessage
 from langchain_community.chat_models import ChatOpenAI
 from langchain.agents.agent_toolkits import create_retriever_tool, create_conversational_retrieval_agent
 from langchain_community.vectorstores import FAISS
+from langchain_core.tools import BaseTool
 
 
-def get_context(make, model, year, car_issue):
+def get_context(make: str, model: str, year: str, car_issue: str) -> str:
   """
   Generates a diagnostic context using LangChain and OpenAI GPT models.
 
@@ -45,7 +45,7 @@ def get_context(make, model, year, car_issue):
   "search-for-car-diagnosis-context",
   "provides information about how to fix cars and what problems they have")
 
-  tool1 = [car_tool]
+  tool1: list[BaseTool] = [car_tool]
 
   system_message = SystemMessage(
     content='''

@@ -10,7 +10,7 @@ import requests
 import json
 
 
-def prompt_chat_gpt(message_content, model="gpt-3.5-turbo"):
+def prompt_chat_gpt(message_content: str, model: str ="gpt-3.5-turbo")  -> dict:
   """Sends a request to OpenAI's GPT model to generate a chat response.
 
     This function takes a message content string and an optional model
