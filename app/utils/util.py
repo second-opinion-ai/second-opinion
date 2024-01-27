@@ -56,7 +56,6 @@ def get_context(make: str, model: str, year: str, car_issue: str) -> str:
     Format:
 
     WHAT IS THE DIAGNOSIS: ....
-    add a new line here
     HOW TO FIX IT: ....
 
     STRICTLY USE THIS FORMAT TO ANSWER
@@ -79,7 +78,13 @@ def get_context(make: str, model: str, year: str, car_issue: str) -> str:
 
   response = agent_executor(merged_text)
   response_text = response['output']
-
-  response_text.replace("HOW TO FIX IT", "\n HOW TO FIX IT")
+  # replace '\n' with '<br />' for html display nextline
+  response_text = response_text.replace(
+      "HOW TO FIX IT",
+      "<br /><br /> HOW TO FIX IT"
+    ).replace(
+      '\n',
+      '<br />'
+    )
 
   return response_text
