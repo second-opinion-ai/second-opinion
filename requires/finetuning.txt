@@ -5,3 +5,4 @@ llama-cpp-python > 0.1.53
 jsonlines
 pandas
 datasets
+transformers
