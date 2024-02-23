@@ -2,3 +2,5 @@
 mypy
 pylint
 black
+beautifulsoup4
+Scrapy
