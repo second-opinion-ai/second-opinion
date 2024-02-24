@@ -2,8 +2,9 @@
 - Install Python version 3.11 (pyenv recommended)
 - Run the `install_dependencies.sh` script to install requirements and setup a virtual environment (`.venv`)
 - Activate the virtual environment `source .venv/bin/activate`
-- Create `.env` file and populate it with API keys:
+- Create `.env` file and populate it with API keys (see "Resources" section for links):
     - `OPENAI_API_KEY`
+    - `SCRAPEOPS_API_KEY`
 
 # Running Locally
 Run the `run_app.sh` script to start a local instance of the application:
@@ -32,3 +33,5 @@ http://localhost:5000
 
 # Resources
 - [OpenAi API reference](https://platform.openai.com/docs/api-reference/introduction)
+- [ScrapeOps Proxy Aggregator](https://scrapeops.io/app/register/proxy)
+- [ScrapeOps Web Scraping Playbook ](https://scrapeops.io/web-scraping-playbook/403-forbidden-error-web-scraping/)
