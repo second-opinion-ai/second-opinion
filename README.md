@@ -35,3 +35,4 @@ http://localhost:5000
 - [OpenAi API reference](https://platform.openai.com/docs/api-reference/introduction)
 - [ScrapeOps Proxy Aggregator](https://scrapeops.io/app/register/proxy)
 - [ScrapeOps Web Scraping Playbook ](https://scrapeops.io/web-scraping-playbook/403-forbidden-error-web-scraping/)
+- [Chilton's library for car diagnostic manuals](https://link.gale.com/apps/CHLL)
