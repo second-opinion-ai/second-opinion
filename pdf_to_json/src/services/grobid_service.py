@@ -72,6 +72,6 @@ class GrobidService:
 if __name__ == "__main__":
   service = GrobidService()
   input_path: str = "../../input_pdfs/Advanced Automotive Fault Diagnosis.pdf"
-  output_path: str = "../../output_xmls/Advanced Automotive Fault Diagnosis.xml"
+  output_path: str = "../../output_teis/Advanced Automotive Fault Diagnosis.xml"
   service.process_pdf(input_path, output_path)
   print(f"Processed PDF saved to {output_path}")
