@@ -3,3 +3,4 @@ mypy
 pylint
 black
 types-requests
+lxml
