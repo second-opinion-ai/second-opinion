@@ -1,6 +1,7 @@
 """Initial experiment to see if we can scrape Chilton's
 """
 
+import json
 import requests
 from bs4 import BeautifulSoup
 
@@ -12,9 +13,8 @@ HEADERS = {
     # "Referer": "https://google.com",
     # "Accept-Language": "en-US,en;q=0.9",
     # "User-Agent": "Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"
-    "Authorization": "Bearer eyJraWQiOiIyMTU3NDU1ODE1NjA3NzI5NjY4Mjc4Mzc4MzYwNDg3MjE2NzU5ODMiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJDaGlsdG9uTGlicmFyeS5jb20iLCJhdWQiOiJHYWxlIiwic3ViIjoiZ2FpbnN0b2Z0ZWNoIiwiaWF0IjoxNzA5MzkyNjQ5LCJleHAiOjE3MDkzOTYyNDksInZlciI6IjIiLCJsb2NhdGlvbl9pZCI6ImdhaW5zdG9mdGVjaCIsImxvY2F0aW9uX3RpdGxlIjoiR2VvcmdpYSBJbnN0aXR1dGUgT2YgVGVjaG5vbG9neSIsImluc3RpdHV0aW9uX2lkIjoiZ2Vvcmdpb3QiLCJpbnN0aXR1dGlvbl90aXRsZSI6IiIsImNvdW50cnkiOiJVUyIsInJlZ2lvbiI6IkdBIiwiYXV0aF90eXBlIjoic2hpYmJvbGV0aCIsImNsaWVudF9pcCI6IjEzMC40NC4xNDkuMTYiLCJ1YSI6IjE2OTEyMTQ1IiwibGFuZ19pZCI6IjEiLCJsYXVuY2hfZG9tYWluIjoiZ2FsZS5jb20iLCJhdXRoX3NlcnZlciI6Imh0dHBzOi8vaW5mb3RyYWMuZ2FsZS5jb20vZ2FsZW5ldC9nYWluc3RvZnRlY2giLCJtZW51X3NlcnZlciI6Imh0dHBzOi8vbGluay5nYWxlLmNvbS9hcHBzL21lbnU_dXNlckdyb3VwTmFtZT1nYWluc3RvZnRlY2giLCJzZXNzaW9uX2lkIjoiMTcwOTM5MjY0OTYxMGdhaW5zdG9mdGVjaCIsInVpX3ByZWZlcmVuY2UiOiJnYWxlbmV0IiwicHJvZHVjdF9pZCI6IkNITEwiLCJleHBpcmF0aW9uIjoiMjAyNDAzMDMxNTE3MjkgR01UIiwibGljZW5zZV90b2tlbiI6bnVsbCwibGljZW5zZV9saW1pdCI6LTEsImJyYW5kaW5nX3NjcmlwdCI6IiAiLCJicmFuZGluZ190ZXh0IjoiICIsInNjb3BlIjoicmVhZCJ9.Ql32KsUXuNlDDZLl7-jHm5oowQ4Wuphomu6aQI4CqoCsvqVb3V-b1GNRptqyGfCkfvcIwsFlKe3iKkoJOmFFk2Kbd0TUqZL3wgzU42w6t8IgT9nonZjB6C5as0s22VTcfnDiYFAr7m_VZqGRt6RfNu6B4MkBkVp7-djVpUyQCzROG42I5Meoh7CRrY_iKMuNFRk7aXlyaark8YCXQFFGWJRkzsIY_NyVDat3_EpNDTCyOVv8jaWzVv9UD8I0nFwVdqzn-t4rkLpLJ-v2rlqVeSLo90SnC1vz6Iy7EVYX5DnFp_wYZwdeeLZziu6t37G3081xEmmoInr_QCK-away7A"
+    "Authorization": "Bearer eyJraWQiOiIyMTU3NDU1ODE1NjA3NzI5NjY4Mjc4Mzc4MzYwNDg3MjE2NzU5ODMiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJDaGlsdG9uTGlicmFyeS5jb20iLCJhdWQiOiJHYWxlIiwic3ViIjoic3BsX21haW4iLCJpYXQiOjE3MDk3OTE0MDgsImV4cCI6MTcwOTc5NTAwOCwidmVyIjoiMiIsImxvY2F0aW9uX2lkIjoic3BsX21haW4iLCJsb2NhdGlvbl90aXRsZSI6IlNlYXR0bGUgUHVibGljIExpYnJhcnkiLCJpbnN0aXR1dGlvbl9pZCI6InNwbCIsImluc3RpdHV0aW9uX3RpdGxlIjoiIiwiY291bnRyeSI6IlVTIiwicmVnaW9uIjoiV0EiLCJhdXRoX3R5cGUiOiJpcCIsImNsaWVudF9pcCI6IjY2LjIxMi42NS4yMTUiLCJ1YSI6IjUwOTkwODY1IiwibGFuZ19pZCI6IjEiLCJsYXVuY2hfZG9tYWluIjoiZ2FsZS5jb20iLCJhdXRoX3NlcnZlciI6Imh0dHBzOi8vaW5mb3RyYWMuZ2FsZS5jb20vZ2FsZW5ldC9zcGxfbWFpbiIsIm1lbnVfc2VydmVyIjoiaHR0cHM6Ly9saW5rLmdhbGUuY29tL2FwcHMvbWVudT91c2VyR3JvdXBOYW1lPXNwbF9tYWluIiwic2Vzc2lvbl9pZCI6IjE3MDk3NzY3ODM2ODFzcGxfbWFpbiIsInVpX3ByZWZlcmVuY2UiOiJnYWxlbmV0IiwicHJvZHVjdF9pZCI6IkNITEwiLCJleHBpcmF0aW9uIjoiMjAyNDAzMDgwMTU5NDMgR01UIiwibGljZW5zZV90b2tlbiI6bnVsbCwibGljZW5zZV9saW1pdCI6LTEsImJyYW5kaW5nX3NjcmlwdCI6Imh0dHBzOi8vYXNzZXRzLmNlbmdhZ2UuY29tL2dhbGUvYnJhbmRpbmcvY29uc29ydGlhL3dzbC5qcyIsImJyYW5kaW5nX3RleHQiOiIgIiwic2NvcGUiOiJyZWFkIn0.qEY0PbelEuyliAY5Vr0tj-e68Hbyf4ik7Jo1cVo3irZhfI8qrQQTCBoiLui-zPLl-um-seHifqFfzfvJ78WMJzvQVRDBfS3L6wRhhYsdJnMa1V4DGEcKCrc9ySnRo3Ko6x6KzjmNPFz1Kjq8GsktmBZRhprapsvnDARsMW9031tNQHXMai6-IS9aMHFtdfe29mrbiJBUUhd7KCmysCZLc3ylefdleBBR-Lay2gwfGFHP05CLIiaTcKDmHFg_SS--CgWB2_kdZh9g7ifdcUULeeuQUnFzRkpFcDg0os-hgUWiOeG0KYQ0Uy2O2KMfIWz3BMmDofoNhkt1eRd7QMtamA"
 }
-
 
 url = 'https://appapi.chiltonlibrary.com/chilton-vehicle-service/make/2017'
 def get_makes():
@@ -23,6 +23,7 @@ def get_makes():
     makes = [x['make'] for x in response.json()['makes']]
     assert 'Nissan' in makes
     return makes
+
 print(get_makes())
 
 url = 'https://appapi.chiltonlibrary.com/chilton-vehicle-service/model/2017/Nissan'
@@ -47,8 +48,35 @@ def get_car_base():
 base_vehicle_id = get_car_base()['baseVehicleId']
 
 url = f'https://appapi.chiltonlibrary.com/chilton-repair-service/toc/{base_vehicle_id}'
+
 def get_table_of_contents():
     # Send a GET request to the website
     response = requests.get(url, headers=HEADERS)
     return response.json()
-print(get_table_of_contents())
+
+toc = get_table_of_contents()
+
+with open (f"./json_dump/{base_vehicle_id}.json", "w") as fo:
+     json.dump(toc, fo, ensure_ascii = False) 
+
+
+url = 'https://appapi-chiltonlibrary-com.ezproxy.spl.org/chilton-repair-service/toc/articlelist/140871/115931'
+toc = get_table_of_contents()
+
+
+
+url = 'https://appapi-chiltonlibrary-com.ezproxy.spl.org/chilton-repair-service/toc/article'
+data = {"bvid":140871,"articleIds":["330366"],"parentTocName":"Frame Straightening","parentTocId":115931}
+HEADERS.update(
+{'Content-type':'application/json', 
+    'Accept':'application/json'
+})
+
+response = requests.post(url, 
+    json = data,
+    headers = HEADERS,
+)
+
+print(response.json())
+
+
