@@ -3,3 +3,4 @@ mypy
 pylint
 black
 types-requests
+graphviz # for drawing diagrams
