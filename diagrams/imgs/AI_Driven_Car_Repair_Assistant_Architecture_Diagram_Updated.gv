@@ -1,0 +1,12 @@
+// AI-driven Car Repair Assistant Architecture
+digraph {
+	rankdir=LR
+	A [label="User Interface" shape=parallelogram]
+	B [label="OpenAI LLM" shape=ellipse]
+	C [label="Milvus Vector Database" shape=cylinder]
+	D [label="Diagnostic Suggestions" shape=parallelogram]
+	A -> B [label="inputs to"]
+	B -> C [label=queries]
+	C -> B [label="retrieves context for"]
+	B -> D [label=generates]
+}

@@ -1,0 +1,1 @@
+This draws diagrams as requested for a blog post for Millvus showing the architecture of the project.

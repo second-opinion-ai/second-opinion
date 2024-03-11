@@ -1,0 +1,19 @@
+// AI-driven Car Repair Assistant Architecture
+digraph {
+	rankdir=LR
+	A [label="User Interface
+(Web Form)" shape=rectangle]
+	B [label="Form Submission & Context Retrieval
+(form_routes -> util.py)" shape=component]
+	C [label="ChatGPT Service
+(chat_gpt_service.py)" shape=cylinder]
+	D [label="OpenAI API
+(GPT-3.5-turbo)" shape=cloud]
+	A -> B [label="submits diagnostic form"]
+	B -> C [label="retrieves context &
+prompts ChatGPT"]
+	C -> D [label="sends request to
+OpenAI API"]
+	D -> C [label="returns generated response"]
+	C -> A [label="displays diagnosis in UI"]
+}
