@@ -1,0 +1,20 @@
+// AI-driven Car Repair Assistant Architecture
+digraph {
+	rankdir=TB
+	A [label="User Interface
+(Web Form)" shape=rectangle]
+	B [label="Form Submission & Context Retrieval)" shape=component]
+	E [label="Milvus
+(Vector Database)" shape=database]
+	C [label="ChatGPT Service" shape=cylinder]
+	D [label="OpenAI API
+(GPT-3.5-turbo)" shape=cloud]
+	A -> B [label="submits diagnostic form"]
+	B -> E [label="queries for relevant content"]
+	E -> C [label="retrieves context &
+prompts ChatGPT"]
+	C -> D [label="sends request to
+OpenAI API"]
+	D -> C [label="returns generated response"]
+	C -> A [label="displays diagnosis in UI"]
+}
