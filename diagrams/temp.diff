@@ -1,0 +1,87 @@
+diff --git a/diagrams/draw_diagram.py b/diagrams/draw_diagram.py
+index ada1195..d1281c5 100644
+--- a/diagrams/draw_diagram.py
++++ b/diagrams/draw_diagram.py
+@@ -3,24 +3,26 @@ from graphviz import Digraph
+ dot = Digraph(comment='AI-driven Car Repair Assistant Architecture')
+ 
+ # Setting graph direction (left to right)
+-dot.attr(rankdir='LR')
++dot.attr(rankdir='TB')
+ 
+ # Defining nodes with specific shapes for different components
+ dot.node('A', 'User Interface\n(Web Form)', shape='rectangle')
+-dot.node('B', 'Form Submission & Context Retrieval\n(form_routes -> util.py)', shape='component')
+-dot.node('C', 'ChatGPT Service\n(chat_gpt_service.py)', shape='cylinder')
++dot.node('B', 'Form Submission & Context Retrieval)', shape='component')
++dot.node('E', 'Milvus\n(Vector Database)', shape='database')
++dot.node('C', 'ChatGPT Service', shape='cylinder')
+ dot.node('D', 'OpenAI API\n(GPT-3.5-turbo)', shape='cloud')
+ 
+ # Adding edges to represent the flow and interactions with descriptions
+ dot.edge('A', 'B', 'submits diagnostic form')
+-dot.edge('B', 'C', 'retrieves context &\nprompts ChatGPT')
++dot.edge('B', 'E', 'queries for relevant content')
++dot.edge('E', 'C', 'retrieves context &\nprompts ChatGPT')
+ dot.edge('C', 'D', 'sends request to\nOpenAI API')
+ dot.edge('D', 'C', 'returns generated response')
+ dot.edge('C', 'A', 'displays diagnosis in UI')
+ 
+ 
+ # Render the graph to a file and display it
+-file_path_with_flask = './imgs/AI_Driven_Car_Repair_Assistant_Architecture_Diagram_With_Flask.gv'
++file_path_with_flask = './imgs/AI_Driven_Car_Repair_Assistant_Architecture_Diagram.gv'
+ dot.render(file_path_with_flask, format='png', view=True)
+ 
+ file_path_with_flask + '.png'  # Return the path of the generated PNG file
+diff --git a/diagrams/imgs/AI_Driven_Car_Repair_Assistant_Architecture_Diagram_Updated.gv b/diagrams/imgs/AI_Driven_Car_Repair_Assistant_Architecture_Diagram_Updated.gv
+deleted file mode 100644
+index 1fb186e..0000000
+--- a/diagrams/imgs/AI_Driven_Car_Repair_Assistant_Architecture_Diagram_Updated.gv
++++ /dev/null
+@@ -1,12 +0,0 @@
+-// AI-driven Car Repair Assistant Architecture
+-digraph {
+-	rankdir=LR
+-	A [label="User Interface" shape=parallelogram]
+-	B [label="OpenAI LLM" shape=ellipse]
+-	C [label="Milvus Vector Database" shape=cylinder]
+-	D [label="Diagnostic Suggestions" shape=parallelogram]
+-	A -> B [label="inputs to"]
+-	B -> C [label=queries]
+-	C -> B [label="retrieves context for"]
+-	B -> D [label=generates]
+-}
+diff --git a/diagrams/imgs/AI_Driven_Car_Repair_Assistant_Architecture_Diagram_Updated.gv.png b/diagrams/imgs/AI_Driven_Car_Repair_Assistant_Architecture_Diagram_Updated.gv.png
+deleted file mode 100644
+index 1980027..0000000
+Binary files a/diagrams/imgs/AI_Driven_Car_Repair_Assistant_Architecture_Diagram_Updated.gv.png and /dev/null differ
+diff --git a/diagrams/imgs/AI_Driven_Car_Repair_Assistant_Architecture_Diagram_With_Flask.gv b/diagrams/imgs/AI_Driven_Car_Repair_Assistant_Architecture_Diagram_With_Flask.gv
+deleted file mode 100644
+index 5dd24b3..0000000
+--- a/diagrams/imgs/AI_Driven_Car_Repair_Assistant_Architecture_Diagram_With_Flask.gv
++++ /dev/null
+@@ -1,19 +0,0 @@
+-// AI-driven Car Repair Assistant Architecture
+-digraph {
+-	rankdir=LR
+-	A [label="User Interface
+-(Web Form)" shape=rectangle]
+-	B [label="Form Submission & Context Retrieval
+-(form_routes -> util.py)" shape=component]
+-	C [label="ChatGPT Service
+-(chat_gpt_service.py)" shape=cylinder]
+-	D [label="OpenAI API
+-(GPT-3.5-turbo)" shape=cloud]
+-	A -> B [label="submits diagnostic form"]
+-	B -> C [label="retrieves context &
+-prompts ChatGPT"]
+-	C -> D [label="sends request to
+-OpenAI API"]
+-	D -> C [label="returns generated response"]
+-	C -> A [label="displays diagnosis in UI"]
+-}
+diff --git a/diagrams/imgs/AI_Driven_Car_Repair_Assistant_Architecture_Diagram_With_Flask.gv.png b/diagrams/imgs/AI_Driven_Car_Repair_Assistant_Architecture_Diagram_With_Flask.gv.png
+deleted file mode 100644
+index 5e9efd1..0000000
+Binary files a/diagrams/imgs/AI_Driven_Car_Repair_Assistant_Architecture_Diagram_With_Flask.gv.png and /dev/null differ
