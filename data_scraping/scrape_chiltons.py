@@ -124,10 +124,6 @@ for lay0 in r_json[0]['elements']:
     i += 1
 
 
-while len(r_json[0]['elements'][2]['elements']) != 0:
-     last_dict = r_json[0]['elements'][2]['elements'].pop()
-
-
 
 # section 2: explore toc json
 with open ('/Users/linliu/dev/second-opinion/data_scraping/json_dump/140871.json') as f:
@@ -141,3 +137,24 @@ for item in toc_json['data']:
      lay1_labels.append(lay1['label'])
 
 len(lay1_labels) # should be 18
+
+
+# recursively request for and insert repair content
+def assess_children (input_json):
+    children_ls = input_json['children']
+    if len(children_ls) == 0:
+          print ('--make a request--\n')
+          tocId = input_json['tocId']
+          # make a request
+          # process the return 
+          
+          # insert in the text
+          input_json['children'].append({'text': repair_response})
+          print (input_json)
+    else:
+         for h2 in children_ls:
+            assess_children(h2)
+
+
+assess_children(toc_json['data'][0])
+
