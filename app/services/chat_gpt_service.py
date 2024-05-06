@@ -1,4 +1,5 @@
-"""Module to interact with OpenAI's GPT model for generating chat responses.
+"""
+Module to interact with OpenAI's GPT model for generating chat responses.
 
 This module provides functionality to send requests to OpenAI's GPT model
 and retrieve generated responses based on the provided message content.

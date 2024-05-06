@@ -67,7 +67,7 @@
                         <p><strong>Year:</strong> ${data.diagnostic_info.year}</p>
                         <p><strong>Issue:</strong> ${data.diagnostic_info.car_issue}</p>
                         <h2>LLM Response</h2>
-                        <p>${data.chat_gpt_response}</p>
+                        <p>${data.llm_response}</p>
                     `;
                     })
                     .catch(error => console.error('Error:', error));
